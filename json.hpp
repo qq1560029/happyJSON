@@ -30,8 +30,8 @@ namespace JSON {
 		bool isArray() { return type == jsonArrayType ? true : false; }
 		double getNumber() { return number; }
 		std::string getString() { return std::string(*string); }
-		std::shared_ptr<std::vector<jsonStruct>> getArray() { return array; }  //是否隐藏内部指针？
-		std::shared_ptr<std::map<std::string, jsonStruct>> getObject() { return obejct; }  ////是否隐藏内部指针？
+		std::shared_ptr<std::vector<jsonStruct>> getArray() { return array; } 
+		std::shared_ptr<std::map<std::string, jsonStruct>> getObject() { return object; } 
 		int getType() { return type; }
 		jsonStruct operator[](int pos) { 
 			jsonStruct res;
@@ -39,8 +39,8 @@ namespace JSON {
 		}
 		jsonStruct operator[](std::string name) {
 			jsonStruct res;
-			auto it = obejct->find(name);
-			if (it == obejct->end()) {
+			auto it = object->find(name);
+			if (it == object->end()) {
 				res.type = jsonWrongName;
 				return res;
 			}
@@ -57,7 +57,7 @@ namespace JSON {
 		std::shared_ptr<std::string> string;
 		double number = 0;
 		std::shared_ptr<std::vector<jsonStruct>> array;
-		std::shared_ptr<std::map<std::string, jsonStruct>> obejct;
+		std::shared_ptr<std::map<std::string, jsonStruct>> object;
 		jsonType type=jsonWrongName;
 	};
 
@@ -87,7 +87,7 @@ namespace JSON {
 			if (jsonData.empty())
 				return res;
 			res += '{';
-			unsigned int inde = 1;  //缩进数量
+			unsigned int inde = 1;  //indentation num
 			stringifyObject(res, std::make_shared<jsonDataType>(jsonData), inde);
 			res += '\n';
 			res += '}';
@@ -123,7 +123,7 @@ namespace JSON {
 				return MISSING_FRONT_BRACKET;
 			do {
 				parseList.pop_front(); //pop "," "{"
-				if (*parseList.begin() == '}') {  //空对象
+				if (*parseList.begin() == '}') {  //null
 					parseList.pop_front();
 					return PARSE_OK;
 				}
@@ -361,7 +361,7 @@ namespace JSON {
 			do 
 			{
 				parseList.pop_front();
-				if (*parseList.begin() == ']') {  //空Array
+				if (*parseList.begin() == ']') {  //null
 					parseList.pop_front();
 					value.type = jsonArrayType;
 					value.array = std::make_shared<std::vector<jsonStruct>>(vec);
@@ -387,7 +387,7 @@ namespace JSON {
 		int parseObject(std::list<char> &parseList, jsonStruct &value) {
 			jsonDataType data;
 			int stat = parseListCore(parseList, data);
-			value.obejct = std::make_shared<jsonDataType>(data);
+			value.object = std::make_shared<jsonDataType>(data);
 			value.type = jsonObjectType;
 			return stat;
 		}
@@ -482,7 +482,7 @@ namespace JSON {
 				case jsonTrueType:res += "true"; break;
 				case jsonFalseType:res += "false"; break;
 				case jsonNumberType:
-					ss.str("");   //ss.clear()是清空ss状态而不是内容
+					ss.str("");   //ss.clear() clear the state of ss not the content of ss.
 					ss << it.second.getNumber();
 					res += ss.str();
 					break;

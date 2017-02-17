@@ -123,13 +123,6 @@ TEST(stringifytest, test1) {
 }
 
 int main(int argc, char* argv[]) {
-
-	Json t;
-	t.parse("{\"s\":10}");
-	std::cout<<t.stringify();
-	t["s"] = 12.0;
-	std::cout << t.stringify();
-
 	testing::InitGoogleTest(&argc, argv);
 	return RUN_ALL_TESTS();
 }
