@@ -1,5 +1,5 @@
+#include "gtest/gtest.h"
 #include "json.hpp"
-#include "googletest-master/googletest/include/gtest/gtest.h"
 
 using namespace JSON;
 

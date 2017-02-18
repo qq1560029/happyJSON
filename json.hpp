@@ -30,8 +30,8 @@ namespace JSON {
 		bool isArray() { return type == jsonArrayType ? true : false; }
 		double getNumber() { return number; }
 		std::string getString() { return std::string(*string); }
-		std::shared_ptr<std::vector<jsonStruct>> getArray() { return array; } 
-		std::shared_ptr<std::map<std::string, jsonStruct>> getObject() { return object; } 
+		std::shared_ptr<std::vector<jsonStruct>> getArray() { return array; }
+		std::shared_ptr<std::map<std::string, jsonStruct>> getObject() { return object; }
 		int getType() { return type; }
 		jsonStruct operator[](int pos) { 
 			jsonStruct res;
